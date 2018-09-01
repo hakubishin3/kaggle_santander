@@ -1,5 +1,13 @@
+# data file
 data/
 input/
 *csv
 *gz
 *pkl
+*feather
+
+# python
+__pycache__/
+
+# jupyter notebook
+.ipynb_checkpoints

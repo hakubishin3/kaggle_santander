@@ -1,6 +1,5 @@
 # data file
 data/
-input/
 *csv
 *gz
 *pkl

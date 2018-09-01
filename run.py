@@ -22,6 +22,10 @@ def main():
         train_path, test_path, args.debug_mode)
     logger.debug(f'train: {train.shape}, test: {test.shape}')
 
+    # make features
+    
+
+
 
 if __name__ == '__main__':
     main()

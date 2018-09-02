@@ -1,10 +1,7 @@
 {
-    "features": [
-        "aggregate"
-    ],
     "dataset": {
         "input_directory": "data/input/",
-        "feature_directory": "data/feature/",
+        "cache_directory": "data/processed",
         "files": {
             "train": "train.csv",
             "test": "test.csv"

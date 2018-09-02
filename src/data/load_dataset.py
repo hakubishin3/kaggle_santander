@@ -9,7 +9,7 @@ def get_dataset_filename(config, dataset_type: str):
     return Path(path)
 
 
-def load_dataset(train_path, test_path, debug_mode=False):
+def load_dataset(train_path, test_path, debug_mode: bool):
     train = pd.read_csv(train_path)
     test = pd.read_csv(test_path)
 

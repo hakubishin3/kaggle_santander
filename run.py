@@ -8,7 +8,7 @@ from src.features.base import load_features
 from src.features.Aggregates import Aggregates, Aggregates_giba40cols
 from src.features.Decomposition import Decomposition, Decomposition_giba40cols
 from src.features.BuildHist import BuildHist, BuildHist_giba40cols
-from src.features.LSTM import LSTM_giba40cols
+from src.features.LSTMAE import LSTM_giba40cols
 
 feature_map = {
     'Aggregates': Aggregates,

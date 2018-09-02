@@ -1,7 +1,40 @@
 {
     "features": [
-        "aggregate"
+        "Aggregates",
+        "Aggregates_giba40cols",
+        "Decomposition",
+        "Decomposition_giba40cols",
+        "BuildHist",
+        "BuildHist_giba40cols",
+        "LSTM_giba40cols"
     ],
+    "model": {
+        "name": "lightgbm",
+        "model_params": {
+            "boosting_type": "gbdt",
+            "objective": "regression",
+            "metric": "rmse",
+            "learning_rate": 0.005,
+            "num_leaves": 180,
+            "feature_fraction": 0.80,
+            "bagging_fraction": 0.30,
+            "bagging_freq": 5,
+            "bagging_seed": 42,
+            "max_depth": -1,
+            "reg_alpha": 70,
+            "reg_lambda": 30,
+            "subsample": 1.0,
+            "min_split_gain":0.2,
+            "min_child_weight": 10,
+            "zero_as_missing": "True",
+            "verbosity": -1,
+            "seed": 71
+        },
+        "train_params": {
+            "num_boost_round": 10000,
+            "early_stopping_round": 300
+        }
+    },
     "dataset": {
         "input_directory": "data/input/",
         "feature_directory": "data/feature/",

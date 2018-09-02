@@ -1,5 +1,6 @@
-import re
 import time
+import inspect
+import argparse
 import pandas as pd
 from pathlib import Path
 from abc import ABCMeta, abstractmethod
@@ -17,36 +18,32 @@ def timer(name):
 class Feature(metaclass=ABCMeta):
     prefix = ''
     suffix = ''
-    dir = '.'
 
-    def __init__(self):
+    def __init__(self, path='.'):
         self.name = self.__class__.__name__
-        self.train = pd.DataFrame()
-        self.test = pd.DataFrame()
-        self.train_path = Path(self.dir) / f'{self.name}_train.ftr'
-        self.test_path = Path(self.dir) / f'{self.name}_test.ftr'
+        self.train_feature = pd.DataFrame()
+        self.test_feature = pd.DataFrame()
+        self.train_path = Path(path) / f'{self.name}_train.ftr'
+        self.test_path = Path(path) / f'{self.name}_test.ftr'
 
-    def run(self):
+    def run(self, train: pd.DataFrame, test: pd.DataFrame):
         with timer(self.name):
-            self.create_features()
+            self.create_features(train, test)
             prefix = self.prefix + '_' if self.prefix else ''
             suffix = '_' + self.suffix if self.suffix else ''
-            self.train.columns = prefix + self.train.columns + suffix
-            self.test.columns = prefix + self.test.columns + suffix
+            self.train_feature.columns = \
+                prefix + self.train_feature.columns + suffix
+            self.test_feature.columns = \
+                prefix + self.test_feature.columns + suffix
         return self
 
     @abstractmethod
-    def create_features(self):
+    def create_features(self, train: pd.DataFrame, test: pd.DataFrame):
         raise NotImplementedError
 
     def save(self):
-        self.train.to_feather(str(self.train_path))
-        self.test.to_feather(str(self.test_path))
-
-
-def make_features(train, test, config, overwrite: bool):
-    for f in config['features']:
-        print("a")
+        self.train_feature.to_feather(str(self.train_path))
+        self.test_feature.to_feather(str(self.test_path))
 
 
 def load_features(config):

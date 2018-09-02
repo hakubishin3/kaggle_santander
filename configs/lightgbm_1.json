@@ -14,10 +14,10 @@
             "boosting_type": "gbdt",
             "objective": "regression",
             "metric": "rmse",
-            "learning_rate": 0.005,
-            "num_leaves": 180,
-            "feature_fraction": 0.80,
-            "bagging_fraction": 0.30,
+            "learning_rate": 0.002,
+            "num_leaves": 250,
+            "feature_fraction": 0.30,
+            "bagging_fraction": 0.40,
             "bagging_freq": 5,
             "bagging_seed": 42,
             "max_depth": -1,
@@ -32,12 +32,14 @@
         },
         "train_params": {
             "num_boost_round": 10000,
-            "early_stopping_round": 300
+            "early_stopping_rounds": 300,
+            "verbose_eval": 200
         }
     },
     "dataset": {
         "input_directory": "data/input/",
         "feature_directory": "data/feature/",
+        "output_directory": "data/output/",
         "files": {
             "train": "train.csv",
             "test": "test.csv"

@@ -2,6 +2,8 @@ import json
 import argparse
 import logging
 import numpy as np
+import pandas as pd
+from sklearn.metrics import mean_squared_error
 from src.data.load_dataset import get_dataset_filename, load_dataset
 from src.utils.logger_functions import get_module_logger
 from src.features.base import load_features
@@ -9,6 +11,7 @@ from src.features.Aggregates import Aggregates, Aggregates_giba40cols
 from src.features.Decomposition import Decomposition, Decomposition_giba40cols
 from src.features.BuildHist import BuildHist, BuildHist_giba40cols
 from src.features.LSTMAE import LSTM_giba40cols
+from src.models.lightgbm import LightGBM
 
 feature_map = {
     'Aggregates': Aggregates,
@@ -41,7 +44,7 @@ def main():
     logger.debug(f'train: {train.shape}, test: {test.shape}')
 
     y_train = np.log1p(train['target'].values)
-    test_index = test['ID'].values
+    test_id = test['ID'].values
     train.drop(['ID', 'target'], axis=1, inplace=True)
     test.drop(['ID'], axis=1, inplace=True)
 
@@ -64,6 +67,28 @@ def main():
     logger.debug(f'number of features: {x_train.shape[1]}')
 
     # train model
+    logger.info('train model')
+    params = config['model']
+    seed_params = [1, 2, 3, 4, 5]
+    sub_preds_total = np.zeros(x_test.shape[0])
+    oof_preds_total = np.zeros(x_train.shape[0])
+    for seed in seed_params:
+        params['model_params']['seed'] = seed
+        oof_preds, sub_preds = LightGBM().cv(
+            x_train=x_train, y_train=y_train, x_test=x_test, params=params)
+        sub_preds_total += sub_preds / len(seed_params)
+        oof_preds_total += oof_preds / len(seed_params)
+
+    oof_score = mean_squared_error(y_train, oof_preds_total)**0.5
+    logger.debug(f'OOF Score: {oof_score}')
+
+    # save a submission file
+    logger.info('make submission file')
+    output_path = config['dataset']['output_directory']
+    sub_df = pd.DataFrame({'ID': test_id})
+    sub_df['target'] = np.expm1(sub_preds_total)
+    sub_df.to_csv(output_path+'submission.csv', index=False)
+    logger.info('save results')
 
 
 if __name__ == '__main__':

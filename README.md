@@ -1,2 +1,2 @@
 # kaggle_santander
-This script is for no leak model.
+This script is for non leak model.
